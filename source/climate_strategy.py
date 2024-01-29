@@ -1,17 +1,17 @@
 import streamlit as st
 import pandas as pd
 from enum import Enum
-from data import data
 from plots import show_area_plot
+from data import action_areas
 import json
 
 # constants
-INDICATORS_METADATA = './data/goal_indicators.csv'
-REFERENCES = './data/references.csv'
-PLOTS = './data/plots.csv'
-HISTORIC_VALUES = './data/time_series.csv'
-PREDICTION_VALIUES = './data/prediction_values.csv'
-SCENARIOS_FILE = './data/scenario.csv'
+INDICATORS_METADATA = './source/data/goal_indicators.csv'
+REFERENCES = './source/data/references.csv'
+PLOTS = './source/data/plots.csv'
+HISTORIC_VALUES = './source/data/time_series.csv'
+PREDICTION_VALIUES = './source/data/prediction_values.csv'
+SCENARIOS_FILE = './source/data/scenario.csv'
 
 
 class ActionAreaTypes(Enum):
@@ -39,6 +39,13 @@ def show_references():
 
 def show_scenarios():
     st.markdown('## Szenarien')
+    scenario_list = []
+    for key, action_area in action_areas.items():
+        for key, goal in action_area['goals'].items():
+            if 'scenarios' in goal:
+                for key, scenario in goal['scenarios'].items():
+                    st.write(key)
+                    st.write(scenario)
 
 
 def show_data():
@@ -48,11 +55,11 @@ def show_data():
 class ActionArea:
     def __init__(self, id: ActionAreaTypes):
         self.id = id
-        self.description = data[id]['description']
-        self.title = data[id]['title']
-        self.menu_text = data[id]['menu_text']
-        self.menu_icon = data[id]['menu_icon']
-        self.goals = data[id]['goals']
+        self.description = action_areas[id]['description']
+        self.title = action_areas[id]['title']
+        self.menu_text = action_areas[id]['menu_text']
+        self.menu_icon = action_areas[id]['menu_icon']
+        self.goals = action_areas[id]['goals']
         self.measures = []
         self.time_series_options = [] #self.get_time_series_options(id)
         self.hist_values = [] # self.get_hist_data(id)

@@ -1,4 +1,4 @@
-data = {
+action_areas = {
     'AA1': {
         'title': 'Mobilität',
         'description': '''Die Emissionen aus dem Bereich der Mobilität machen heute einen Fünftel aller direkten Emissionen  im Kanton Basel-Stadt aus. Sie stammen mehrheitlich aus dem motorisierten Individualverkehr (MIV),  aber auch aus dem Güter- und dem öffentlichen Verkehr. Der Fuss- und Veloverkehr verursacht keine direkten Emissionen. Die Emissionen von Motorrädern und Reisecars werden ausgeklammert, denn  sie machen nur einen marginalen Anteil an den gesamten Verkehrsemissionen aus. Analog zur Mobilitätsstrategie sind auch die Luftfahrt und der Schiffsverkehr vorerst ausgeklammert. Diese werden im Rahmen von Teil 2 der Klimaschutzstrategie angegangen.''',
@@ -11,7 +11,24 @@ data = {
                 'monitoring': '''Der Anteil von emissonslos betriebenen Fahrzeugen berechnet sich wie folgt:\n\n$\\frac{\\text{Anz\\_MIV\_emissionsfrei}}{\\text{Anz\\_MIV\\_total}}$\n\nWobei für Prognoserechnungen:\n\nmiv_total(j) = miv_total(j-1) * f1\n\nmiv_emmissionsfrei(j) = miv_neuzulassung(j-1) * f2\n\nmit f1 = Zuwachs/Abnahme des Fahrzeugbestandes und f2 = Anteil emissionsfreier Neuzulassungen''',
                 'goal-indicators': ['miv_emmission_free_pct'],
                 'time-series': ['fahrzeuge', 'fahrzeuge-elektrisch', 'miv-neuzulass'],
+                'scenarios': {
+                    'zuwachs_miv': {
+                        'tief': 'Weiterführung des trends der letzten 5 Jahre: Lineare extrapolation Mittel 2015-2000 = 99%',
+                        'mittel': 'Mittel 2015-200 wird bis 2030 auf um 1% reduziert, bis 20240 um 2%',
+                        'hoch': 'Mittel 2015-200 wird bis 2030 auf um 1% reduziert'
+                        },
+                    'einsatzdauer_miv': {
+                        'tief': 'Weiterführung des trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 10 Jahre',
+                        'mittel': 'Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 8 Jahre',
+                        'hoch': 'Mittlere Einsatzdauer wird Beschleunigt auf: 6 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 5 Jahre',
+                    },
+                    'anteil_emissionslos_miv': {
+                        'tief': 'Weiterführung des trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 10%',
+                        'mittel': 'Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 8 Jahre',
+                        'hoch': 'Mittlere Einsatzdauer wird Beschleunigt auf: 6 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 5 Jahre',
+                    }
                 },
+            },
             'M2': {
                     'title': ''' Der Güterverkehr ist mehrheitlich emissionsfrei. Die im Kanton Basel-Stadt immatrikulierten Lieferwagen und Lastwagen sind zu 65 % emissionsfrei im Betrieb (direkte Emissionen).''',
                     'description': '''Ähnlich wie bei den Personenwagen ist der heutige Anteil der fossilfreien Nutzfahrzeuge sehr gering. Das Gesamtkonzept Elektromobilität unterstützt auch hier die Elektrifizierung. Sie wird aber langsamer voranschreiten als bei den Personenwagen, weil im Vergleich zu Elektroautos grössere Herausforderungen bestehen. Dazu gehört insbesondere, dass die notwendigen grossen Leistungen zu schweren Batterien führen und auch andere Antriebsarten (z.B. Wasserstoff, synthetische Treibstoffe) wirtschaftlich interessant sein können. Auch hier hängt die Entwicklung stark von der Bundespolitik ab.'''
