@@ -1,0 +1,5 @@
+AA;name;description;type
+M1;miv-ersatz-alter;Alter bei dem ein Fahrzeug ersetzt wird;
+M1;miv-h2-ratio-purchase;Anteil H2-Fahrzeuge bei neukauf
+M1;miv-electr-ratio-purchase;AnteilElektro-Fahrzeuge bei Neukauf
+M2;miv-nocar-ratio;Verzicht auf Fahrzeug

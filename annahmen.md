@@ -1,0 +1,1 @@
+Für jedes Ziel gibt es genau ein Ziel Indikator

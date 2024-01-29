@@ -1,0 +1,69 @@
+jahr;kategorie1;kategorie2;kategorie3;wert
+2020;Bevölkerung;;;201971
+2027;Bevölkerung;;;207036
+2032;Bevölkerung;;;212638
+2037;Bevölkerung;;;216572
+2050;Bevölkerung;;;226800
+2020;Mobility_total_CO2eq;;;137434 
+2020;Mio. Fzg-km;BS-Flotte;MIV_TV;0.0
+2020;Mio. Fzg-km;BS-Flotte;MIV_ZQV; 89.9
+2020;Mio. Fzg-km;BS-Flotte;MIV_BV;88.8
+2020;Mio. Fzg-km;ausserhalb BS-Flotte;MIV_TV;144.3
+2020;Mio. Fzg-km;ausserhalb BS-Flotte;MIV_ZQV;209.8
+2020;Mio. Fzg-km;ausserhalb BS-Flotte;MIV_BV;22.2
+2020;Input FW;;Abfall RSMVA;68638990
+2020;Input FW;;Kehricht (nur KVA);711946974
+2020;Input FW;;Erdgas iwb;448703853
+2020;Input FW;;Erdgas weitere;120726735
+2020;Input FW;;Klärschlamm;7559739
+2020;Input FW;;Holz;295359413
+2020;Input FW;;Öl (für Spitzenlast/Redundanz in FW);14604040
+2020;Input FW;;Öl für Stützbrennstoff Klärschlammverbrennung;41234938
+2020;Input FW;;WP: Umweltwärme WV Riehen;17206215
+2020;Input FW;;WP: Umweltwärme iwb, ARA und Rhein;1
+2020;Input FW;;WP: Strom für WP WV Riehen;3823603
+2020;Input FW;;WP: Strom für WP iwb, ARA und Rhein;1
+2020;Input FW;;WP: Strom für WP Fernwärme total;3823603
+2027;Input FW;;Abfall RSMVA;68638990
+2027;Input FW;;Kehricht (nur KVA);711946974
+2027;Input FW;;Erdgas iwb;202149925
+2027;Input FW;;Erdgas weitere;73643965
+2027;Input FW;;Klärschlamm;7839519
+2027;Input FW;;Holz;374755366
+2027;Input FW;;Öl (für Spitzenlast/Redundanz in FW);8908544
+2027;Input FW;;Öl für Stützbrennstoff Klärschlammverbrennung;42761012
+2027;Input FW;;WP: Umweltwärme WV Riehen;37018704
+2027;Input FW;;WP: Umweltwärme iwb, ARA und Rhein;134441555
+2027;Input FW;;WP: Strom für WP WV Riehen;8226379
+2027;Input FW;;WP: Strom für WP iwb, ARA und Rhein;29875901
+2027;Input FW;;WP: Strom für WP Fernwärme total;38102280
+2032;Input FW;;Abfall RSMVA;68638990
+2032;Input FW;;Kehricht (nur KVA);711946974
+2032;Input FW;;Erdgas iwb;164819810
+2032;Input FW;;Erdgas weitere;38326255
+2032;Input FW;;Klärschlamm;8159783
+2032;Input FW;;Holz;440966435
+2032;Input FW;;Öl (für Spitzenlast/Redundanz in FW);4636241
+2032;Input FW;;Öl für Stützbrennstoff Klärschlammverbrennung;44507909
+2032;Input FW;;WP: Umweltwärme WV Riehen;40810291
+2032;Input FW;;WP: Umweltwärme iwb, ARA und Rhein;172718298
+2032;Input FW;;WP: Strom für WP WV Riehen;9068954
+2032;Input FW;;WP: Strom für WP iwb, ARA und Rhein;38381844
+2032;Input FW;;WP: Strom für WP Fernwärme total;47450798
+2037;Input FW;;Abfall RSMVA;68638990
+2037;Input FW;;Kehricht (nur KVA);711946974
+2037;Input FW;;Erdgas iwb;123498610
+2037;Input FW;;Erdgas weitere;1
+2037;Input FW;;Klärschlamm;8451820
+2037;Input FW;;Holz;509471598
+2037;Input FW;;Öl (für Spitzenlast/Redundanz;1
+2010;miv_emmission_free_pct;emmissionsfrei;H2;0.1
+2010;miv_emmission_free_pct;emmissionsfrei;elektrisch;0.5
+2015;miv_emmission_free_pct;emmissionsfrei;H2;0.3
+2015;miv_emmission_free_pct;emmissionsfrei;elektrisch;2
+2020;miv_emmission_free_pct;emmissionsfrei;H2;0.5
+2020;miv_emmission_free_pct;emmissionsfrei;elektrisch;4
+
+
+
+

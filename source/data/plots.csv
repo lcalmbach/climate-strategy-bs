@@ -1,0 +1,2 @@
+action_area;data_series;plot_name;plot_type;plot_settings;filters
+AA2;Input FW; area plot Input FW;area;{"x": "jahr", "y": "wert", "color": "kategorie3"};{}
