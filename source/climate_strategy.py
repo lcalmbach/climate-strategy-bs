@@ -114,6 +114,22 @@ class ActionArea:
             filter['kategorie3'] = st.selectbox('Kategorie 3', options=self.time_series_options)
         return df
 
+    def get_value(self, key: str):
+        return 2020, 10.4
+    
+    def display_goal_indicator(self, indicator: dict):
+        st.markdown(f"{indicator['title']}")
+        st.markdown(f"{indicator['description']}")
+        if 'target' in indicator:
+            for key, value in indicator['target'].items():
+                st.markdown(f"Ziel ({key}): {value}")
+                year, value = self.get_value(key)
+                st.markdown(f"Ist ({year}): {value}")
+
+        with st.expander('Daten & Grafik'):
+            df = pd.read_csv(INDICATORS_METADATA, sep=';')
+            st.write(df)
+
     def show_ui(self):
         tabs = st.tabs(['Info', 'Ziele', 'Daten', 'Grafiken', 'Bewertung'])
         with tabs[0]:
@@ -125,22 +141,24 @@ class ActionArea:
             st.markdown(f'**{sel_goal}: {goal["title"]}**')
             st.markdown(goal['description'])
             if 'monitoring' in goal:
-                st.markdown(f'**Methodik:**\n\n{goal["monitoring"]}')
+                st.markdown(f'---')
+                st.markdown(f'**Methodik:**\n\n{goal["monitoring"]}', unsafe_allow_html=True)
                 with st.expander('Faktoren'):
+                    allow_edit = st.toggle('Bearbeiten', value=False)
                     df = pd.read_csv(SCENARIOS_FILE, sep=';')
                     df = df[df['goal'] == sel_goal]
                     factors = list(df['factor'].unique())
                     sel_factor = st.selectbox('Faktor', options=factors)
-                    df = df[df['factor'] == sel_factor] 
-                    st.write(df)
+                    df = df[df['factor'] == sel_factor]
+                    st.data_editor(df)
+                    if allow_edit:
+                        if st.button('Speichern'):
+                            st.success('Die Änderungen wurden erfolgreich gespeichert')
             if 'goal-indicators' in goal:
                 st.markdown("---")
-                st.markdown("**Ziel-Indikatoren:**")
-                for i in goal['goal-indicators']:
-                    st.markdown(f"- {i}")
-                    with st.expander('Daten & Grafik'):
-                        df = pd.read_csv(INDICATORS_METADATA, sep=';')
-                        st.write(df)
+                st.markdown("***Ziel-Indikator(en):***")
+                for key, goal in goal['goal-indicators'].items():
+                    self.display_goal_indicator(goal)
             if 'time-series' in goal:
                 st.markdown("**Auswertungen für die Berechnung der Ziel-Indikatoren**")
                 for t2 in goal['time-series']:

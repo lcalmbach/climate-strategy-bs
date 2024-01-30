@@ -7,35 +7,87 @@ action_areas = {
         'goals': {
             'M1': {
                 'title': 'Der MIV ist fast vollständig emissionsfrei. Die im Kanton Basel-Stadt immatrikulierten Personenwagen fahren zu 97 % CO2-frei (direkte Emissionen)',
-                'description': '''Der Anteil Elektroautos der im Kanton immatrikulierten Personenwagen betrug 2020 weniger als 1 %.  Die Zahl der Neuzulassungen zeigt aber, dass der Markt für Elektrofahrzeuge aufgrund einer ambitionierten nationalen Elektrifizierungspolitik deutlich zulegt und der Bund eine aktive Unterstützung  bei der Elektrifizierung leistet. So waren 18 % der 2022 in der Schweiz neu zugelassenen Personenwagen Elektroautos. Mit dem Gesamtkonzept Elektromobilität sollen im Kantons Basel-Stadt bis  Ende 2026 200 Ladestationen im öffentlichen Strassennetz installiert werden. Zudem hat der Regierungsrat dem Parlament einen Ratschlag vorgelegt, der eine finanzielle Förderung für die Errichtung  öffentlicher und privater Ladestationen vorsieht. Auch die kantonale Motorfahrzeugsteuer setzt bereits Anreize für emissionsfreie Fahrzeuge. Damit erbringt der Kanton bereits eine grosse Vorleistung.  Der angestrebte Anteil von 97 % emissionsfreien Fahrzeugen bei den Personenwagen wird jedoch  nicht möglich sein ohne eine ambitionierte Elektrifizierungspolitik des Bundes. Aufgrund von Oldtimern und weiteren Spezialfahrzeugen wird auch langfristig ein Anteil von 100 % emissionsfreien Fahrzeugen bei den Personenwagen kaum möglich sein.''',
-                'monitoring': '''Der Anteil von emissonslos betriebenen Fahrzeugen berechnet sich wie folgt:\n\n$\\frac{\\text{Anz\\_MIV\_emissionsfrei}}{\\text{Anz\\_MIV\\_total}}$\n\nWobei für Prognoserechnungen:\n\nmiv_total(j) = miv_total(j-1) * f1\n\nmiv_emmissionsfrei(j) = miv_neuzulassung(j-1) * f2\n\nmit f1 = Zuwachs/Abnahme des Fahrzeugbestandes und f2 = Anteil emissionsfreier Neuzulassungen''',
-                'goal-indicators': ['miv_emmission_free_pct'],
-                'time-series': ['fahrzeuge', 'fahrzeuge-elektrisch', 'miv-neuzulass'],
+                'description': '''Der Anteil Elektroautos der im Kanton immatrikulierten Personenwagen betrug 2020 weniger als 1 %.  Die Zahl der Neuzulassungen zeigt aber, dass der Markt für Elektrofahrzeuge aufgrund einer ambitionierten nationalen Elektrifizierungspolitik deutlich zulegt und der Bund eine aktive Unterstützung  bei der Elektrifizierung leistet. So waren 18 % der 2022 in der Schweiz neu zugelassenen Personenwagen Elektroautos. Mit dem Gesamtkonzept Elektromobilität sollen im Kantons Basel-Stadt bis  Ende 2026 200 Ladestationen im öffentlichen Strassennetz installiert werden. Zudem hat der Regierungsrat dem Parlament einen Ratschlag vorgelegt, der eine finanzielle Förderung für die Errichtung  öffentlicher und privater Ladestationen vorsieht. Auch die kantonale Motorfahrzeugsteuer setzt bereits Anreize für emissionsfreie Fahrzeuge. Damit erbringt der Kanton bereits eine grosse Vorleistung. Der angestrebte Anteil von 97 % emissionsfreien Fahrzeugen bei den Personenwagen wird jedoch nicht möglich sein ohne eine ambitionierte Elektrifizierungspolitik des Bundes. Aufgrund von Oldtimern und weiteren Spezialfahrzeugen wird auch langfristig ein Anteil von 100 % emissionsfreien Fahrzeugen bei den Personenwagen kaum möglich sein.''',
+                'monitoring': r'''Der Ist-Anteil von emissonslos betriebenen Fahrzeugen berechnet sich wie folgt:<p>
+                $\text{miv-elektrisch-pct} = \frac{\text{Anz\_MIV\_emissionsfrei}}{\text{Anz\_MIV\_total}}$<p>
+                Die Prognosewerte berechnene sich wie folgt:<p>
+                $\text{miv-elektrisch-pct}_j = \frac{\text{bestand\_miv} \times _{j-1} \times f1}{\text{neuzulassungen\_miv}_{j-1} \times f2}$<p>
+                Wobei f1 = Zuwachs/Abnahme des Fahrzeugbestandes und f2 = Anteil emissionsfreier Neuzulassungen''',
+                'goal-indicators': {
+                    'miv_emissionslos_pzt': {'title': 'Anteil emissionsfreier Fahrzeuge',
+                                             'unit': '%',
+                                             'description': 'Anteil der Personenewgen (MIV), die mit emissionsfreien Antrieben (Elektro, Wasserstoff) betrieben werden',
+                                             'target': {2037: 97}
+                                            }
+                                    },
+                'time-series': ['miv-bestand', 'miv-bestand-elektrisch', 'miv-neuzulass'],
                 'scenarios': {
-                    'zuwachs_miv': {
+                    'miv-bestand': {
                         'tief': 'Weiterführung des trends der letzten 5 Jahre: Lineare extrapolation Mittel 2015-2000 = 99%',
                         'mittel': 'Mittel 2015-200 wird bis 2030 auf um 1% reduziert, bis 20240 um 2%',
                         'hoch': 'Mittel 2015-200 wird bis 2030 auf um 1% reduziert'
                         },
-                    'einsatzdauer_miv': {
-                        'tief': 'Weiterführung des trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 10 Jahre',
-                        'mittel': 'Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 8 Jahre',
+                    'miv-bestand-elektrisch': {
+                        'tief': 'Weiterführung des Trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 10 Jahre, X% der ersetzten Fahrzuege sind emissionslos betrieben.',
+                        'mittel': 'Einsatzdauer der MIV-Fahrzeuge von 10 auf 8 Jahre verkürzt.  der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 8 Jahre',
                         'hoch': 'Mittlere Einsatzdauer wird Beschleunigt auf: 6 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 5 Jahre',
                     },
-                    'anteil_emissionslos_miv': {
+                    'miv-neuzulass': {
                         'tief': 'Weiterführung des trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 10%',
-                        'mittel': 'Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 8 Jahre',
+                        'mittel': 'Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 8 Jahre',
                         'hoch': 'Mittlere Einsatzdauer wird Beschleunigt auf: 6 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 5 Jahre',
                     }
                 },
             },
+
             'M2': {
                     'title': ''' Der Güterverkehr ist mehrheitlich emissionsfrei. Die im Kanton Basel-Stadt immatrikulierten Lieferwagen und Lastwagen sind zu 65 % emissionsfrei im Betrieb (direkte Emissionen).''',
-                    'description': '''Ähnlich wie bei den Personenwagen ist der heutige Anteil der fossilfreien Nutzfahrzeuge sehr gering. Das Gesamtkonzept Elektromobilität unterstützt auch hier die Elektrifizierung. Sie wird aber langsamer voranschreiten als bei den Personenwagen, weil im Vergleich zu Elektroautos grössere Herausforderungen bestehen. Dazu gehört insbesondere, dass die notwendigen grossen Leistungen zu schweren Batterien führen und auch andere Antriebsarten (z.B. Wasserstoff, synthetische Treibstoffe) wirtschaftlich interessant sein können. Auch hier hängt die Entwicklung stark von der Bundespolitik ab.'''
+                    'description': '''Ähnlich wie bei den Personenwagen ist der heutige Anteil der fossilfreien Nutzfahrzeuge sehr gering. Das Gesamtkonzept Elektromobilität unterstützt auch hier die Elektrifizierung. Sie wird aber langsamer voranschreiten als bei den Personenwagen, weil im Vergleich zu Elektroautos grössere Herausforderungen bestehen. Dazu gehört insbesondere, dass die notwendigen grossen Leistungen zu schweren Batterien führen und auch andere Antriebsarten (z.B. Wasserstoff, synthetische Treibstoffe) wirtschaftlich interessant sein können. Auch hier hängt die Entwicklung stark von der Bundespolitik ab.''',
+                    'monitoring': '''Der Anteil von emissonslos betriebenen Last- und Lieferwagen berechnet sich wie folgt:\n\n$\frac{\\text{Anz\\_LLW\_emissionsfrei}}{\\text{Anz\\_LLW\\_total}}$\n\nWobei für Prognoserechnungen:\n\nllw-total(j) = llw-total(j-1) * f1\n\nllw-emmissionsfrei(j) = llw-neuzulassung(j-1) * f2\n\nmit f1 = Zuwachs/Abnahme des Fahrzeugbestandes und f2 = Anteil emissionsfreier Neuzulassungen''',
+                    'goal-indicators': ['llw-emmission_free_pct'],
+                    'time-series': ['llw-bestand', 'llw-elektrisch', 'llw-neuzulass'],
+                    'scenarios': {
+                        'llw-bestand': {
+                            'tief': 'Weiterführung des trends der letzten 5 Jahre: Lineare extrapolation Mittel 2015-2000 = 100%',
+                            'mittel': 'Mittel 2015-200 wird bis 2030 auf um 1% reduziert, bis 20240 um 2%',
+                            'hoch': 'Mittel 2015-200 wird bis 2030 auf um 1% reduziert bis 2040 um 3%'
+                            },
+                        'llw-elektrisch': {
+                            'tief': 'Weiterführung des trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 20 Jahre',
+                            'mittel': 'Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 15 Jahre',
+                            'hoch': 'Mittlere Einsatzdauer wird Beschleunigt auf: 6 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 10 Jahre',
+                        },
+                        'llw-neuzulass': {
+                            'tief': 'Weiterführung des trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 5%',
+                            'mittel': 'Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 10 Jahre',
+                            'hoch': 'Mittlere Einsatzdauer wird Beschleunigt auf: 6 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 15 Jahre',
+                        }
+                    },
                 },
+                
             'M3': {
                     'title': '''Der öffentliche Verkehr Basel-Stadt ist emissionsfrei. Die im Kanton Basel-Stadt immatrikulierten Trams und Busse sind zu 100 % emissionsfrei im Betrieb (direkte Emissionen).''',
-                    'description': '''Die direkten Treibhausgasemissionen aus dem öffentlichen Verkehr machen bereits heute nur einen kleinen Anteil der Emissionen aus. Die Basler Verkehrsbetriebe (BVB) haben den Auftrag, die Busflotte bis 2027 auf 100 % erneuerbare Energie im Antrieb umzustellen. Der Grosse Rat hat dem Kredit zur Umstellung auf E-Busse C@mille110!bereits zugestimmt.37Für die Erreichung der Ziele zur emissionsarmen Fahrzeugflotte (M1-M3) sind folgende Wechselwirkungen zu berücksichtigen: Die Elektrifizierung insbesondere des Busverkehrs senkt die Lärmbelastung, was sich positiv auf die Gesundheit der Bevölkerung auswirken kann (z.B. Stressreaktionen, Schlafqualität). Zudem führt die Elektrifizierung zu einer besseren Luftqualität. Elektrofahrzeuge können ausserdem als Zwischenspeicher für Strom genutzt werden und damit die schwankende Stromversorgung aus erneuerbaren Quellen ausgleichen. Gleichzeitig führt die Elektrifizierung der Fahrzeuge aber zu einer deutlichen Zunahme beim Stromverbrauch. Es ist zu beachten, dass Elektrofahrzeuge nicht längerfristig subventioniert werden sollten, um die Vermeidungs- und Verlagerungsziele nicht zu gefährden. Insbesondere bei den Nutzfahrzeugen ist ein technologieneutraler Ansatz zu verfolgen.'''
+                    'description': '''Die direkten Treibhausgasemissionen aus dem öffentlichen Verkehr machen bereits heute nur einen kleinen Anteil der Emissionen aus. Die Basler Verkehrsbetriebe (BVB) haben den Auftrag, die Busflotte bis 2027 auf 100 % erneuerbare Energie im Antrieb umzustellen. Der Grosse Rat hat dem Kredit zur Umstellung auf E-Busse C@mille110!bereits zugestimmt.37Für die Erreichung der Ziele zur emissionsarmen Fahrzeugflotte (M1-M3) sind folgende Wechselwirkungen zu berücksichtigen: Die Elektrifizierung insbesondere des Busverkehrs senkt die Lärmbelastung, was sich positiv auf die Gesundheit der Bevölkerung auswirken kann (z.B. Stressreaktionen, Schlafqualität). Zudem führt die Elektrifizierung zu einer besseren Luftqualität. Elektrofahrzeuge können ausserdem als Zwischenspeicher für Strom genutzt werden und damit die schwankende Stromversorgung aus erneuerbaren Quellen ausgleichen. Gleichzeitig führt die Elektrifizierung der Fahrzeuge aber zu einer deutlichen Zunahme beim Stromverbrauch. Es ist zu beachten, dass Elektrofahrzeuge nicht längerfristig subventioniert werden sollten, um die Vermeidungs- und Verlagerungsziele nicht zu gefährden. Insbesondere bei den Nutzfahrzeugen ist ein technologieneutraler Ansatz zu verfolgen.''',
+                    'monitoring': '''Der Anteil von emissonslos betriebenen Lastwagen berechnet sich wie folgt:\n\n$\\frac{\\text{Anz\\_MIV\_emissionsfrei}}{\\text{Anz\\_LW\\_total}}$\n\nWobei für Prognoserechnungen:\n\nllw-total(j) = llw-total(j-1) * f1\n\nllw-emmissionsfrei(j) = llw-neuzulassung(j-1) * f2\n\nmit f1 = Zuwachs/Abnahme des Fahrzeugbestandes und f2 = Anteil emissionsfreier Neuzulassungen''',
+                    'goal-indicators': ['llw-emmission_free_pct'],
+                    'time-series': ['llw-bestand', 'lw-elektrisch', 'lw-neuzulass'],
+                    'scenarios': {
+                        'zuwachs_lw': {
+                            'tief': 'Weiterführung des trends der letzten 5 Jahre: Lineare extrapolation Mittel 2015-2000 = 100%',
+                            'mittel': 'Mittel 2015-200 wird bis 2030 auf um 1% reduziert, bis 20240 um 2%',
+                            'hoch': 'Mittel 2015-200 wird bis 2030 auf um 1% reduziert bis 2040 um 3%'
+                            },
+                        'einsatzdauer_lw': {
+                            'tief': 'Weiterführung des trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 20 Jahre',
+                            'mittel': 'Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 15 Jahre',
+                            'hoch': 'Mittlere Einsatzdauer wird Beschleunigt auf: 6 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 10 Jahre',
+                        },
+                        'anteil_emissionslos_LW': {
+                            'tief': 'Weiterführung des trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 5%',
+                            'mittel': 'Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 10 Jahre',
+                            'hoch': 'Mittlere Einsatzdauer wird Beschleunigt auf: 6 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 15 Jahre',
+                        }
+                    },
                 },
             'M4': {
                     'title': '''Personenwagen im Kanton Basel-Stadt sind energieeffizienter. Der durchschnittliche Energieverbrauch der im Kanton immatrikulierten Personenwagen ist gegenüber 2020 um 75 % gesunken und 50 % der Personenwagen haben ein zulässiges Gesamtgewicht von weniger als 1’700 Kg.''',

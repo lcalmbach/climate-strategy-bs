@@ -2,6 +2,13 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 from climate_strategy import ActionAreaTypes, ActionArea, show_references, show_data, show_scenarios    
 
+__version__ = "0.0.1"
+__author__ = "Statistisches Amt des Kantons Basel-Stadt"
+__author_email__ = "stata@bs.ch"
+VERSION_DATE = "2024-01-30"
+MY_EMOJI = "🔧"
+MY_NAME = "Data Alchemy Toolbox"
+
 
 def get_menu():
     menu_items = []
@@ -18,7 +25,22 @@ def get_menu():
     menu_icons.append('box-arrow-up-right')
     return menu_items, menu_icons
 
+def show_info_box():
+    """
+    Displays an information box in the sidebar with author information, version number, and a link to the git repository.
 
+    Parameters:
+    None
+
+    Returns:
+    None
+    """
+    impressum = f"""<div style="background-color:#34282C; padding: 10px;border-radius: 15px; border:solid 1px white;">
+    <small>Autoren: <a href="mailto:{__author_email__}">{__author__}</a><br>
+    Version: {__version__} ({VERSION_DATE})<br>
+    """
+    st.sidebar.markdown(impressum, unsafe_allow_html=True)
+    
 def main():
     if not ('action-areas' in st.session_state):
         st.session_state['action-areas'] = {}
@@ -42,6 +64,7 @@ def main():
     else:
         action_area = [obj for obj in st.session_state['action-areas'].values() if obj.menu_text == selected][0]
         action_area.show_ui()
+    show_info_box()
 
 
 if __name__ == "__main__":
