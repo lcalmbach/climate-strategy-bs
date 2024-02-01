@@ -1,11 +1,17 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-from climate_strategy import ActionAreaTypes, ActionArea, show_references, show_data, show_scenarios    
+from climate_strategy import (
+    ActionAreaTypes,
+    ActionArea,
+    show_references,
+    show_data,
+    show_scenarios,
+)
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __author__ = "Statistisches Amt des Kantons Basel-Stadt"
 __author_email__ = "stata@bs.ch"
-VERSION_DATE = "2024-01-30"
+VERSION_DATE = "2024-02-01"
 MY_EMOJI = "🔧"
 MY_NAME = "Data Alchemy Toolbox"
 
@@ -13,17 +19,18 @@ MY_NAME = "Data Alchemy Toolbox"
 def get_menu():
     menu_items = []
     menu_icons = []
-    for key, value in st.session_state['action-areas'].items():
+    for key, value in st.session_state["action-areas"].items():
         menu_items.append(value.menu_text)
         menu_icons.append(value.menu_icon)
-    
-    menu_items.append('Daten')
-    menu_icons.append('database')
-    menu_items.append('Szenarios')
-    menu_icons.append('bar-chart-line')
-    menu_items.append('Referenzen')
-    menu_icons.append('box-arrow-up-right')
+
+    menu_items.append("Daten")
+    menu_icons.append("database")
+    menu_items.append("Szenarios")
+    menu_icons.append("bar-chart-line")
+    menu_items.append("Referenzen")
+    menu_icons.append("box-arrow-up-right")
     return menu_items, menu_icons
+
 
 def show_info_box():
     """
@@ -40,12 +47,13 @@ def show_info_box():
     Version: {__version__} ({VERSION_DATE})<br>
     """
     st.sidebar.markdown(impressum, unsafe_allow_html=True)
-    
+
+
 def main():
-    if not ('action-areas' in st.session_state):
-        st.session_state['action-areas'] = {}
+    if not ("action-areas" in st.session_state):
+        st.session_state["action-areas"] = {}
         for x in [member.value for member in ActionAreaTypes]:
-            st.session_state['action-areas'][x] = ActionArea(x)
+            st.session_state["action-areas"][x] = ActionArea(x)
 
     menu_items, menu_icons = get_menu()
     with st.sidebar:
@@ -54,15 +62,20 @@ def main():
             menu_items,
             icons=menu_icons,
             menu_icon="globe",
-            default_index=0)
-    if selected == 'Referenzen':
+            default_index=0,
+        )
+    if selected == "Referenzen":
         show_references()
-    elif selected == 'Daten':
+    elif selected == "Daten":
         show_data()
-    elif selected == 'Szenarios':
+    elif selected == "Szenarios":
         show_scenarios()
     else:
-        action_area = [obj for obj in st.session_state['action-areas'].values() if obj.menu_text == selected][0]
+        action_area = [
+            obj
+            for obj in st.session_state["action-areas"].values()
+            if obj.menu_text == selected
+        ][0]
         action_area.show_ui()
     show_info_box()
 

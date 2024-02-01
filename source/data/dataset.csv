@@ -1,5 +1,5 @@
 id;name;description;unit
-1;bevoelkerung_total;Bevölkerung des Kantons BS ;anz;
+1;bevoelkerung_total;Bevölkerung des Kantons BS;anz
 2;fahrzeug-km;Fahrleistungen in Mio. Fzg-km auf Kantonsgebiet;1e6km
 3;input FW;Energieinput (kWh) für Fernwärme Wärme und Strom (WKK) (in Gebäude und Prozessenergie);hWh
 4;miv-bestand;Anzahl Fahrzeuge im Kanton BS Total;anz
@@ -11,5 +11,4 @@ id;name;description;unit
 10;miv_emissionslos_pzt_low;Anteil emissionsloser MIV an allen MIV-Fahrzeugen, tiefes Szenario;%
 11;miv_emissionslos_pzt_medium;Anteil emissionsloser MIV an allen MIV-Fahrzeugen, mittleres Szenario;%
 12;miv_emissionslos_pzt_high;Anteil emissionsloser MIV an allen MIV-Fahrzeugen, hoches Szenario;%
-
-
+13;miv_emissionslos_pzt;Anteil emissionsloser MIV an allen MIV-Fahrzeugen, Ist-Situation, Indikator Ziel M1;%
