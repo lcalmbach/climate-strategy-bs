@@ -19,8 +19,8 @@ def line_chart(df, settings: dict):
         df, x=settings["x"], y=settings["y"], color=settings["color"], markers=False
     )
     fig.update_layout(
-        xaxis_title=settings['x_axis_title'],
-        yaxis_title=settings['y_axis_title'],
+        xaxis_title=settings["x_axis_title"],
+        yaxis_title=settings["y_axis_title"],
         legend_title=settings["color_name"],
     )
     if "h_line" in settings:

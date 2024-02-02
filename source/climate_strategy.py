@@ -161,7 +161,7 @@ class ActionArea:
                 st.markdown(f"Ziel ({key}): {value}")
                 year, value = self.get_value(key)
                 st.markdown(f"Ist ({year}): {value}")
-        if st.button('🚀Neu Berechnen'):
+        if st.button("🚀Neu Berechnen"):
             sim = CarSimulation()
             sim.run()
             fig = sim.plot()
@@ -190,7 +190,7 @@ class ActionArea:
                 "color": "name",
                 "color_name": "Szenario",
                 "x_axis_title": "Jahr",
-                "y_axis_title": 'Anteil emissionslos Fzg MIV %',
+                "y_axis_title": "Anteil emissionslos Fzg MIV %",
                 "h_line": 97,
             }
             fig = line_chart(df, plot_settings)
