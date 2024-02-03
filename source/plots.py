@@ -1,6 +1,25 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import numpy as np
+
+
+def test():
+    # Generate some dummy data
+    df = pd.DataFrame(
+        {
+            "X": np.arange(10),  # X-axis values
+            "Y": np.random.randn(10),  # Y-axis values: 10 random numbers
+        }
+    )
+
+    # Create a line chart using Plotly Express
+    fig = px.line(
+        df, x="X", y="Y", title="Dummy Plotly Express Line Chart", markers=True
+    )
+
+    # Show the figure
+    return fig
 
 
 def show_area_plot(df, settings: dict):
@@ -19,8 +38,8 @@ def line_chart(df, settings: dict):
         df, x=settings["x"], y=settings["y"], color=settings["color"], markers=False
     )
     fig.update_layout(
-        xaxis_title=settings["x_axis_title"],
-        yaxis_title=settings["y_axis_title"],
+        xaxis_title=settings["xaxis_title"],
+        yaxis_title=settings["yaxis_title"],
         legend_title=settings["color_name"],
     )
     if "h_line" in settings:

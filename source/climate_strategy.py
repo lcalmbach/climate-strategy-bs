@@ -1,20 +1,22 @@
 import streamlit as st
 import pandas as pd
 from enum import Enum
-from plots import show_area_plot, line_chart
+from plots import show_area_plot, line_chart, test
 from data import action_areas
 import json
+import os
 
 from sim.m1 import CarSimulation
 
 # constants
-INDICATORS_METADATA = "./source/data/goal_indicators.csv"
-REFERENCES = "./source/data/references.csv"
-PLOTS = "./source/data/plots.csv"
-TIME_SERIES = "./source/data/time_series.csv"
-TIME_SERIES_GOALS = "./source/data/time_series_goal.csv"
-DATASETS = "./source/data/dataset.csv"
-SCENARIOS_FILE = "./source/data/scenario.csv"
+DATA_PATH = "./source/data/"
+INDICATORS_METADATA = os.path.join(DATA_PATH, "goal_indicators.csv")
+REFERENCES = os.path.join(DATA_PATH, "references.csv")
+PLOTS = os.path.join(DATA_PATH, "plots.csv")
+TIME_SERIES = os.path.join(DATA_PATH, "time_series.csv")
+TIME_SERIES_GOALS = os.path.join(DATA_PATH, "time_series_goal.csv")
+DATASETS = os.path.join(DATA_PATH, "dataset.csv")
+SCENARIOS_FILE = os.path.join(DATA_PATH, "scenario.csv")
 
 
 class DatasetTypes(Enum):
@@ -45,7 +47,7 @@ def show_references():
     df = pd.read_csv(REFERENCES, sep=";")
     st.markdown("## Referenzen")
     for index, row in df.iterrows():
-        st.markdown(f"- [{row['text']}]({row['url']}): {row['description']}")
+        st.markdown(f'- [{row["text"]}]({row["url"]}): {row["description"]}')
 
 
 def show_scenarios():
@@ -154,47 +156,22 @@ class ActionArea:
         return 2020, 10.4
 
     def display_goal_indicator(self, indicator: dict, goal_key: str):
-        st.markdown(f"{indicator['title']}")
-        st.markdown(f"{indicator['description']}")
+        st.markdown(f'{indicator["title"]}')
+        st.markdown(f'{indicator["description"]}')
+        sim = CarSimulation()
+        st.write(sim.get_scenarios_df())
         if "target" in indicator:
             for key, value in indicator["target"].items():
                 st.markdown(f"Ziel ({key}): {value}")
                 year, value = self.get_value(key)
                 st.markdown(f"Ist ({year}): {value}")
         if st.button("🚀Neu Berechnen"):
-            sim = CarSimulation()
             sim.run()
-            fig = sim.plot()
-            st.pyplot(fig=fig)
+            plot = sim.get_plot()
+            st.plotly_chart(plot)
             sim.save()
         with st.expander("Daten & Grafik"):
-            df = pd.read_csv(TIME_SERIES, sep=";")
-            datasets = self.get_goal_datasets(
-                goal_key,
-                [
-                    DatasetTypes.goal.value,
-                    DatasetTypes.scenario_low.value,
-                    DatasetTypes.scenario_medium.value,
-                    DatasetTypes.scenario_high.value,
-                ],
-            )
-            df = df[df["ts_id"].isin(datasets)]
-            df_names = pd.read_csv(DATASETS, sep=";")
-            # df_names['id'] = df_names['id'].astype(int)
-            df["ts_id"] = df["ts_id"].astype(int)
-            df = df.merge(df_names[["id", "name"]], left_on="ts_id", right_on="id")
-            df = df[["ts_id", "jahr", "name", "wert"]]
-            plot_settings = {
-                "x": "jahr",
-                "y": "wert",
-                "color": "name",
-                "color_name": "Szenario",
-                "x_axis_title": "Jahr",
-                "y_axis_title": "Anteil emissionslos Fzg MIV %",
-                "h_line": 97,
-            }
-            fig = line_chart(df, plot_settings)
-            st.plotly_chart(fig)
+            ...
 
     def show_ui(self):
         tabs = st.tabs(["Info", "Ziele", "Daten", "Grafiken", "Bewertung"])
@@ -203,6 +180,7 @@ class ActionArea:
             st.markdown(self.description)
         with tabs[1]:
             sel_goal = st.selectbox("Ziel", options=self.goals.keys())
+            sim = CarSimulation()
             goal = self.goals[sel_goal]
             st.markdown(f'**{sel_goal}: {goal["title"]}**')
             st.markdown(goal["description"])
@@ -213,15 +191,11 @@ class ActionArea:
                 )
                 with st.expander("Faktoren"):
                     allow_edit = st.toggle("Bearbeiten", value=False)
-                    df = pd.read_csv(SCENARIOS_FILE, sep=";")
-                    df = df[df["goal"] == sel_goal]
-                    factors = list(df["factor"].unique())
-                    sel_factor = st.selectbox("Faktor", options=factors)
-                    df = df[df["factor"] == sel_factor]
+                    df = sim.get_scenarios_df()
                     st.data_editor(df)
                     if allow_edit:
-                        if st.button("Speichern"):
-                            st.success("Die Änderungen wurden erfolgreich gespeichert")
+                       if st.button('Speichern'):
+                           st.success('Die Änderungen wurden erfolgreich gespeichert')
             if "goal-indicators" in goal:
                 st.markdown("---")
                 st.markdown("***Ziel-Indikator(en):***")
