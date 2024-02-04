@@ -6,7 +6,7 @@ from data import action_areas
 import json
 import os
 
-from sim.m1 import CarSimulation
+from sim import m1, m2
 
 # constants
 DATA_PATH = "./source/data/"
@@ -17,6 +17,8 @@ TIME_SERIES = os.path.join(DATA_PATH, "time_series.csv")
 TIME_SERIES_GOALS = os.path.join(DATA_PATH, "time_series_goal.csv")
 DATASETS = os.path.join(DATA_PATH, "dataset.csv")
 SCENARIOS_FILE = os.path.join(DATA_PATH, "scenario.csv")
+
+SIM_DICT = {'M1': m1.CarSimulation, 'M2': m2.TruckSimulation}
 
 
 class DatasetTypes(Enum):
@@ -92,6 +94,20 @@ class ActionArea:
         self.hist_values = []  # self.get_hist_data(id)
         self.plots = []  # self.get_plots(id)
         self.plot_options = []  # list(self.plots['plot_name'].unique())
+        self._current_goal = None
+        self.current_simulation = None
+    
+    @property
+    def current_goal(self):
+        return self._current_goal
+    
+    @current_goal.setter
+    def current_goal(self, value):
+        self._current_goal = value
+        if value in SIM_DICT:
+            self.current_simulation = SIM_DICT[value](value)
+        else:
+            self.current_simulation = None
 
     def get_goal_datasets(self, goal: str, types: list) -> list:
         df = pd.read_csv(TIME_SERIES_GOALS, sep=";")
@@ -153,74 +169,61 @@ class ActionArea:
         return df
 
     def get_value(self, key: str):
-        return 2020, 10.4
+        return 2023, round(0.032904665 * 100, 1)
 
     def display_goal_indicator(self, indicator: dict, goal_key: str):
         st.markdown(f'{indicator["title"]}')
         st.markdown(f'{indicator["description"]}')
-        sim = CarSimulation()
-        st.write(sim.get_scenarios_df())
+        
         if "target" in indicator:
             for key, value in indicator["target"].items():
                 st.markdown(f"Ziel ({key}): {value}")
                 year, value = self.get_value(key)
-                st.markdown(f"Ist ({year}): {value}")
+                st.markdown(f"Ist ({year}): {value}%")
         if st.button("🚀Neu Berechnen"):
-            sim.run()
-            plot = sim.get_plot()
-            st.plotly_chart(plot)
-            sim.save()
+            self.current_simulation.run()
+            self.current_simulation.save()
         with st.expander("Daten & Grafik"):
-            ...
-
+            plot = self.current_simulation.get_plot()
+            st.plotly_chart(plot)
+        
     def show_ui(self):
-        tabs = st.tabs(["Info", "Ziele", "Daten", "Grafiken", "Bewertung"])
+        st.markdown(f"## {self.title}")
+        tabs = st.tabs(["Info", "Ziele", "Basisdaten", "Bewertung"])
         with tabs[0]:
-            st.markdown(f"## {self.title}")
             st.markdown(self.description)
         with tabs[1]:
-            sel_goal = st.selectbox("Ziel", options=self.goals.keys())
-            sim = CarSimulation()
-            goal = self.goals[sel_goal]
-            st.markdown(f'**{sel_goal}: {goal["title"]}**')
+            self.current_goal = st.selectbox("Ziel", options=self.goals.keys())
+            goal = self.goals[self.current_goal]
+            st.markdown(f'**{self.current_goal}: {goal["title"]}**')
             st.markdown(goal["description"])
-            if "monitoring" in goal:
+            if self.current_simulation is not None:
                 st.markdown(f"---")
                 st.markdown(
                     f'**Methodik:**\n\n{goal["monitoring"]}', unsafe_allow_html=True
                 )
                 with st.expander("Faktoren"):
                     allow_edit = st.toggle("Bearbeiten", value=False)
-                    df = sim.get_scenarios_df()
+                    df = self.current_simulation.intervals_df
                     st.data_editor(df)
                     if allow_edit:
                        if st.button('Speichern'):
                            st.success('Die Änderungen wurden erfolgreich gespeichert')
-            if "goal-indicators" in goal:
+                st.markdown("---")
+                st.markdown("***Szenarios:***")
+                st.write(goal["scenarios"])
                 st.markdown("---")
                 st.markdown("***Ziel-Indikator(en):***")
                 for key, goal in goal["goal-indicators"].items():
-                    self.display_goal_indicator(goal, sel_goal)
-            if "time-series" in goal:
-                st.markdown("**Auswertungen für die Berechnung der Ziel-Indikatoren**")
-                for t2 in goal["time-series"]:
-                    st.markdown(f"- {t2}")
+                    self.display_goal_indicator(goal, self.current_goal)
+            else:
+                st.warning("Dieses Ziel hat noch keine Simulation")
 
         with tabs[2]:
-            ...
-            # sel_dataset = st.selectbox('Datensatz', options=self.time_series_options)
-            # df = self.hist_values[self.hist_values['kategorie1'] == sel_dataset]
-            # df = self.get_filter(df)
-            # st.dataframe(df)
+            if self.current_simulation:
+                st.data_editor(self.current_simulation.data, hide_index=True)
+
         with tabs[3]:
-            if len(self.plot_options) > 0:
-                sel_plot = st.selectbox("Graphik", options=self.plot_options)
-                plot = self.plots[self.plots["plot_name"] == sel_plot].iloc[0]
-                self.show_settings(plot)
-                self.show_plot(plot)
-            else:
-                st.info("Keine Graphiken vorhanden")
-        with tabs[4]:
             for key, goal in self.goals.items():
                 st.markdown(f"#### {key}")
                 st.markdown(f'Bewertung von *{goal["title"]}*')

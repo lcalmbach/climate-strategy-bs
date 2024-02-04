@@ -41,7 +41,7 @@ class Car:
     is_electric: bool
 
 
-class CarSimulation(BaseSimulation):
+class TruckSimulation(BaseSimulation):
     def __init__(self, target):
         super().__init__(target)
 

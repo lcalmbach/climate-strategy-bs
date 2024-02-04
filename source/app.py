@@ -8,12 +8,13 @@ from climate_strategy import (
     show_scenarios,
 )
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 __author__ = "Statistisches Amt des Kantons Basel-Stadt"
 __author_email__ = "stata@bs.ch"
-VERSION_DATE = "2024-02-01"
-MY_EMOJI = "🔧"
-MY_NAME = "Data Alchemy Toolbox"
+VERSION_DATE = "2024-04-02"
+GIT_REPO = "https://github.com/lcalmbach/climate-strategy-bs"
+MY_EMOJI = "🔮"
+MY_NAME = "KSS-Monitoring"
 
 
 def get_menu():
@@ -25,8 +26,6 @@ def get_menu():
 
     menu_items.append("Daten")
     menu_icons.append("database")
-    menu_items.append("Szenarios")
-    menu_icons.append("bar-chart-line")
     menu_items.append("Referenzen")
     menu_icons.append("box-arrow-up-right")
     return menu_items, menu_icons
@@ -43,8 +42,9 @@ def show_info_box():
     None
     """
     impressum = f"""<div style="background-color:#34282C; padding: 10px;border-radius: 15px; border:solid 1px white;">
-    <small>Autoren: <a href="mailto:{__author_email__}">{__author__}</a><br>
-    Version: {__version__} ({VERSION_DATE})<br>
+    <small>Autor: <a href="mailto:{__author_email__}">{__author__}</a><br>
+    🚧 Version: {__version__} ({VERSION_DATE})<br>
+    <a href="{GIT_REPO}" style="color:white">Git-Repository</a></small>
     """
     st.sidebar.markdown(impressum, unsafe_allow_html=True)
 
@@ -58,7 +58,7 @@ def main():
     menu_items, menu_icons = get_menu()
     with st.sidebar:
         selected = option_menu(
-            "KSS Monitoring",
+            MY_NAME,
             menu_items,
             icons=menu_icons,
             menu_icon="globe",

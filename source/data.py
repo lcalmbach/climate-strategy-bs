@@ -11,8 +11,14 @@ action_areas = {
                 "monitoring": r"""Der Ist-Anteil von emissonslos betriebenen Fahrzeugen berechnet sich wie folgt:<p>
                 $\text{miv-elektrisch-pct} = \frac{\text{Anz\_MIV\_emissionsfrei}}{\text{Anz\_MIV\_total}}$<p>
                 Die Prognosewerte berechnene sich wie folgt:<p>
-                $\text{miv-elektrisch-pct}_j = \frac{\text{bestand\_miv} \times _{j-1} \times f1}{\text{neuzulassungen\_miv}_{j-1} \times f2}$<p>
-                Wobei f1 = Zuwachs/Abnahme des Fahrzeugbestandes und f2 = Anteil emissionsfreier Neuzulassungen""",
+                $\text{miv-elektrisch-pct}_j = \frac{\text{bestand\_miv} \times _{j-1} \times f1}{\text{neuzulassungen\_miv}_{j-1} \times f3}$<p>
+                Wobei:
+
+f1 = Jährlicher Zuwachs/Abnahme des Fahrzeugbestandes.
+                
+f2 = Durchschnittliches Alter in Jahren bei dem ein Fahrzeug ersetzt wird.
+                
+f3 = Anteil emissionsfreier Neuzulassungen.""",
                 "goal-indicators": {
                     "miv_emissionslos_pzt": {
                         "title": "Anteil emissionsfreier Fahrzeuge",
@@ -28,7 +34,7 @@ action_areas = {
                 ],
                 "scenarios": {
                     "miv-bestand": {
-                        "tief": "Weiterführung des trends der letzten 5 Jahre: Lineare extrapolation Mittel 2015-2000 = 99%",
+                        "tief": "Weiterführung des Trends der letzten 5 Jahre: Lineare Extrapolation Mittel 2015-2000 = 99%",
                         "mittel": "Mittel 2015-200 wird bis 2030 auf um 1% reduziert, bis 20240 um 2%",
                         "hoch": "Mittel 2015-200 wird bis 2030 auf um 1% reduziert",
                     },
@@ -47,13 +53,22 @@ action_areas = {
             "M2": {
                 "title": """ Der Güterverkehr ist mehrheitlich emissionsfrei. Die im Kanton Basel-Stadt immatrikulierten Lieferwagen und Lastwagen sind zu 65 % emissionsfrei im Betrieb (direkte Emissionen).""",
                 "description": """Ähnlich wie bei den Personenwagen ist der heutige Anteil der fossilfreien Nutzfahrzeuge sehr gering. Das Gesamtkonzept Elektromobilität unterstützt auch hier die Elektrifizierung. Sie wird aber langsamer voranschreiten als bei den Personenwagen, weil im Vergleich zu Elektroautos grössere Herausforderungen bestehen. Dazu gehört insbesondere, dass die notwendigen grossen Leistungen zu schweren Batterien führen und auch andere Antriebsarten (z.B. Wasserstoff, synthetische Treibstoffe) wirtschaftlich interessant sein können. Auch hier hängt die Entwicklung stark von der Bundespolitik ab.""",
-                "monitoring": """Der Anteil von emissonslos betriebenen Last- und Lieferwagen berechnet sich wie folgt:\n\n$\frac{\\text{Anz\\_LLW\_emissionsfrei}}{\\text{Anz\\_LLW\\_total}}$\n\nWobei für Prognoserechnungen:\n\nllw-total(j) = llw-total(j-1) * f1\n\nllw-emmissionsfrei(j) = llw-neuzulassung(j-1) * f2\n\nmit f1 = Zuwachs/Abnahme des Fahrzeugbestandes und f2 = Anteil emissionsfreier Neuzulassungen
-                    """,
+                "monitoring": r"""Der Ist-Anteil von emissonslos betriebenen Fahrzeugen berechnet sich wie folgt:<p>
+                $\text{miv-elektrisch-pct} = \frac{\text{Anz\_MIV\_emissionsfrei}}{\text{Anz\_MIV\_total}}$<p>
+                Die Prognosewerte berechnene sich wie folgt:<p>
+                $\text{lkw-elektrisch-pct}_j = \frac{\text{bestand\_lkw} \times _{j-1} \times f1}{\text{neuzulassungen\_lkw}_{j-1} \times f3}$<p>
+                Wobei:
+
+f1 = Jährlicher Zuwachs/Abnahme des Bestands an Last und Lieferwagen (LKW).
+                
+f2 = Durchschnittliches Alter in Jahren bei dem ein Fahrzeug ersetzt wird.
+                
+f3 = Anteil emissionsfreier Neuzulassungen von LKW.""",
                 "goal-indicators": ["llw-emmission_free_pct"],
                 "time-series": ["llw-bestand", "llw-elektrisch", "llw-neuzulass"],
                 "scenarios": {
                     "llw-bestand": {
-                        "tief": "Weiterführung des trends der letzten 5 Jahre: Lineare extrapolation Mittel 2015-2000 = 100%",
+                        "tief": "Weiterführung des Trends der letzten 5 Jahre: Lineare Extrapolation Mittel 2015-2000 = 100%",
                         "mittel": "Mittel 2015-200 wird bis 2030 auf um 1% reduziert, bis 20240 um 2%",
                         "hoch": "Mittel 2015-200 wird bis 2030 auf um 1% reduziert bis 2040 um 3%",
                     },
@@ -73,8 +88,15 @@ action_areas = {
                 "title": """Der öffentliche Verkehr Basel-Stadt ist emissionsfrei. Die im Kanton Basel-Stadt immatrikulierten Trams und Busse sind zu 100 % emissionsfrei im Betrieb (direkte Emissionen).""",
                 "description": """Die direkten Treibhausgasemissionen aus dem öffentlichen Verkehr machen bereits heute nur einen kleinen Anteil der Emissionen aus. Die Basler Verkehrsbetriebe (BVB) haben den Auftrag, die Busflotte bis 2027 auf 100 % erneuerbare Energie im Antrieb umzustellen. Der Grosse Rat hat dem Kredit zur Umstellung auf E-Busse C@mille110!bereits zugestimmt.37Für die Erreichung der Ziele zur emissionsarmen Fahrzeugflotte (M1-M3) sind folgende Wechselwirkungen zu berücksichtigen: Die Elektrifizierung insbesondere des Busverkehrs senkt die Lärmbelastung, was sich positiv auf die Gesundheit der Bevölkerung auswirken kann (z.B. Stressreaktionen, Schlafqualität). Zudem führt die Elektrifizierung zu einer besseren Luftqualität. Elektrofahrzeuge können ausserdem als Zwischenspeicher für Strom genutzt werden und damit die schwankende Stromversorgung aus erneuerbaren Quellen ausgleichen. Gleichzeitig führt die Elektrifizierung der Fahrzeuge aber zu einer deutlichen Zunahme beim Stromverbrauch. Es ist zu beachten, dass Elektrofahrzeuge nicht längerfristig subventioniert werden sollten, um die Vermeidungs- und Verlagerungsziele nicht zu gefährden. Insbesondere bei den Nutzfahrzeugen ist ein technologieneutraler Ansatz zu verfolgen.""",
                 "monitoring": """Der Anteil von emissonslos betriebenen Lastwagen berechnet sich wie folgt:\n\n$\\frac{\\text{Anz\\_MIV\_emissionsfrei}}{\\text{Anz\\_LW\\_total}}$\n\nWobei für Prognoserechnungen:\n\nllw-total(j) = llw-total(j-1) * f1\n\nllw-emmissionsfrei(j) = llw-neuzulassung(j-1) * f2\n\nmit f1 = Zuwachs/Abnahme des Fahrzeugbestandes und f2 = Anteil emissionsfreier Neuzulassungen""",
-                "goal-indicators": ["llw-emmission_free_pct"],
-                "time-series": ["llw-bestand", "lw-elektrisch", "lw-neuzulass"],
+                "goal-indicators": {
+                    "oev_emissionslos_pzt": {
+                        "title": "Anteil emissionsfreier Fahrzeuge",
+                        "unit": "%",
+                        "description": "Anteil der Tram und Busse, die mit emissionsfreien Antrieben (Elektro, Wasserstoff) betrieben werden",
+                        "target": {2037: 100},
+                    }
+                },
+                "time-series": ["bus-bestand", "bus-elektrisch"],
                 "scenarios": {
                     "zuwachs_lw": {
                         "tief": "Weiterführung des trends der letzten 5 Jahre: Lineare extrapolation Mittel 2015-2000 = 100%",
@@ -82,7 +104,7 @@ action_areas = {
                         "hoch": "Mittel 2015-200 wird bis 2030 auf um 1% reduziert bis 2040 um 3%",
                     },
                     "einsatzdauer_lw": {
-                        "tief": "Weiterführung des trends der letzten 5 Jahre mit : Lineare extrapolation Mittel 2015-2000, 20 Jahre",
+                        "tief": "Weiterführung des trends der letzten 5 Jahre mit: Lineare extrapolation Mittel 2015-2000, 20 Jahre",
                         "mittel": "Mittlere Einsatzdauer der Fahrzeuge bis 2030: 10 Jahre, anschlieessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 15 Jahre",
                         "hoch": "Mittlere Einsatzdauer wird Beschleunigt auf: 6 Jahre, anschliessend werden fossil betriebene Fahrzeuge wegen EU Regelung schneller aus dem Betrieb genommen, 10 Jahre",
                     },
