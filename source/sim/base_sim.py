@@ -23,5 +23,27 @@ class BaseSimulation():
         df = df[df['ziel'] == self.target]
         return df
 
+    def save_edits(self, df):
+        df.to_csv(SCENARIO_INTERVALS, sep=';', index=False)
+        self.intervals_df = df
+
+    def save(self):
+        '''data is saved in the deleted format with 1 row per factor and base data item
+        when read it is unmelted into the pivot format: year, factor1, factor2, time series1 
+        '''
+        df = pd.DataFrame()
+        for scenario in self.scenario_names:
+            values = self.result_dict[scenario].reset_index()
+            df_factor = values.melt(id_vars=['jahr'], var_name='serie', value_name='wert')
+            df_factor['szenario'] = scenario
+            df_factor['ziel'] = self.target
+            column_order = ['ziel', 'jahr', 'serie', 'wert', 'szenario']
+            df_factor = df_factor[column_order]
+            df = pd.concat([df, df_factor])
+        df.to_csv(os.path.join(DATA_PATH, 'factors.csv'), sep=';', index=False)
+
+    def __repr__(self):
+        return f'CarSimulation({self.target})'
+    
     def run(self):
         ...

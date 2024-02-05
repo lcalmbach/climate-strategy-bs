@@ -7,6 +7,7 @@ import json
 import os
 
 from sim import m1, m2
+from utils import convert_df
 
 # constants
 DATA_PATH = "./source/data/"
@@ -148,12 +149,6 @@ class ActionArea:
             fig = show_area_plot(df, settings)
         st.plotly_chart(fig)
 
-    def show_settings(self, plot: dict):
-        with st.sidebar.expander("⚙️Einstellungen"):
-            par1 = st.slider("Parameter 1", min_value=0, max_value=100, value=50)
-            par2 = st.slider("Parameter 2", min_value=0, max_value=100, value=50)
-            par3 = st.radio("Parameter 3", options=["Option 1", "Option 2", "Option 3"])
-
     def get_filter(self, df):
         filter = {}
         with st.sidebar.expander("🔍Filter"):
@@ -180,12 +175,18 @@ class ActionArea:
                 st.markdown(f"Ziel ({key}): {value}")
                 year, value = self.get_value(key)
                 st.markdown(f"Ist ({year}): {value}%")
-        if st.button("🚀Neu Berechnen"):
-            self.current_simulation.run()
-            self.current_simulation.save()
+        
         with st.expander("Daten & Grafik"):
-            plot = self.current_simulation.get_plot()
+            plot, plot_df = self.current_simulation.get_plot()
             st.plotly_chart(plot)
+            st.download_button(
+                label="Daten herunterladen",
+                data=plot_df.to_csv().encode('utf-8'),
+                file_name='large_df.csv',
+                mime='text/csv',
+            )
+                
+
         
     def show_ui(self):
         st.markdown(f"## {self.title}")
@@ -202,16 +203,20 @@ class ActionArea:
                 st.markdown(
                     f'**Methodik:**\n\n{goal["monitoring"]}', unsafe_allow_html=True
                 )
+                st.markdown("**Szenarien**")
                 with st.expander("Faktoren"):
                     allow_edit = st.toggle("Bearbeiten", value=False)
                     df = self.current_simulation.intervals_df
-                    st.data_editor(df)
+                    edited_df = st.data_editor(df)
                     if allow_edit:
-                       if st.button('Speichern'):
-                           st.success('Die Änderungen wurden erfolgreich gespeichert')
-                st.markdown("---")
-                st.markdown("***Szenarios:***")
-                st.write(goal["scenarios"])
+                        if st.button('Speichern'):
+                            self.current_simulation.save_edits(edited_df)
+                            st.success('Die Änderungen wurden erfolgreich gespeichert. Führe eine Neuberechnung durch, um die Auswirkungen in der Grafik sichtbar zu machen.')
+                        if st.button("🧮Neu Berechnen"):
+                            self.current_simulation.run()
+                            self.current_simulation.save()
+                with st.expander("Beschreibung der Szenarien"):
+                    st.write(goal["scenarios"])
                 st.markdown("---")
                 st.markdown("***Ziel-Indikator(en):***")
                 for key, goal in goal["goal-indicators"].items():

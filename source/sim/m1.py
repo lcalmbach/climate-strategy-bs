@@ -174,20 +174,32 @@ class CarSimulation(BaseSimulation):
         for scenario in self.scenario_names:
             cars = self.cars.copy()
             values = self.result_dict[scenario]
+            values[BaseData.TS_ELECTRIC_RATIO.name] = 0
             values[BaseData.TS_ELECTRIC.name] = 0
+            values[BaseData.TS_TOTAL.name] = 0
+            values['new_gas'] = 0
+            values['new_electric'] = 0
+            values['old_cars'] = 0
+            values['miv_gas'] = 0
             for year in range(SIM_START_YEAR, SIM_END_YEAR + 1):
+                new_car_num = round(len(cars) * values.loc[year, 'f1'])
+                car_num = len(cars)
                 age_limit = values.loc[year, 'f2']
+                # remove cars older than age_limit
                 cars = [car for car in cars if car.age < age_limit]
-                to_replace = int(values.loc[year, BaseData.TS_TOTAL.name] - len(cars))
-
+                to_replace = new_car_num - len(cars)
+                # after an increase in car age cobined with a decline in predicted cars, the number of cars to be replaced
+                # is negative and cars need to be removed
+                if to_replace < 0:
+                    cars_sorted_by_age = sorted(cars, key=lambda car: car.age, reverse=True)
+                    cars = cars_sorted_by_age[-(to_replace):]
+                    to_replace = 0
+                old_car_num = car_num - len(cars)
                 # Number of electric and gas cars added
                 electric_added = round(to_replace * values.loc[year, 'f3'])
                 gas_added = to_replace - electric_added
-                values.loc[year, BaseData.TS_ELECTRIC.name] = len(
-                    [car for car in cars if car.is_electric]
-                )
 
-                # Increment age for each car
+                # Increment age for each remaining car
                 cars = [
                     Car(age=car.age + 1, is_electric=car.is_electric) for car in cars
                 ]
@@ -197,9 +209,18 @@ class CarSimulation(BaseSimulation):
                 )
                 # Add new gas cars
                 cars.extend([Car(age=0, is_electric=False) for _ in range(gas_added)])
-                values[self.target_time_series_name] = (
+                values.loc[year, BaseData.TS_ELECTRIC.name] = len(
+                    [car for car in cars if car.is_electric]
+                )
+                # values.loc[year, 'new_gas'] = gas_added
+                # values.loc[year, 'new_electric'] = electric_added
+                # values.loc[year, 'old_cars'] = old_car_num
+                # values.loc[year, 'miv_gas'] = len([car for car in cars if not car.is_electric])
+                values.loc[year, BaseData.TS_TOTAL.name] = len(cars)
+            values[self.target_time_series_name] = (
                     100 * values[BaseData.TS_ELECTRIC.name] / values[BaseData.TS_TOTAL.name]
                 )
+            # st.write(values)
 
     def get_plot(self):
         settings = {
@@ -217,9 +238,9 @@ class CarSimulation(BaseSimulation):
             df = df[['jahr', self.target_time_series_name]]
             df['szenario'] = scenario
             results.append(df)
-        df_all = pd.concat(results)
-        fig = line_chart(df_all, settings)
-        return fig
+        plot_df = pd.concat(results)
+        fig = line_chart(plot_df, settings)
+        return fig, plot_df
     
     def get_factors(self):
         '''data read from the melted format and unmeldetd into a dict with one dataframe per scenario
@@ -233,17 +254,6 @@ class CarSimulation(BaseSimulation):
             my_scenarios[scenario] = df_scenario
         return my_scenarios
 
-    def save(self):
-        '''data is saved in the mleted format with 1 row per factor and base data item
-        when read it is unmelted into the pivot format: year, factor1, factor2, time series1 
-        '''
-        df = pd.DataFrame()
-        for scenario in self.scenario_names:
-            values = self.result_dict[scenario].reset_index()
-            df_factor = values.melt(id_vars=['jahr'], var_name='serie', value_name='wert')
-            df_factor['szenario'] = scenario
-            df_factor['ziel'] = self.target
-            column_order = ['ziel', 'jahr', 'serie', 'wert', 'szenario']
-            df_factor = df_factor[column_order]
-            df = pd.concat([df, df_factor])
-        df.to_csv(os.path.join(DATA_PATH, 'factors.csv'), sep=';', index=False)
+    
+
+    
