@@ -7,11 +7,12 @@ from climate_strategy import (
     show_data,
     show_scenarios,
 )
+from dashboard import Dashboard
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 __author__ = "Statistisches Amt des Kantons Basel-Stadt"
 __author_email__ = "stata@bs.ch"
-VERSION_DATE = "2024-05-02"
+VERSION_DATE = "2024-02-06"
 GIT_REPO = "https://github.com/lcalmbach/climate-strategy-bs"
 MY_EMOJI = "🔮"
 MY_NAME = "KSS-Monitoring"
@@ -26,6 +27,8 @@ def get_menu():
 
     menu_items.append("Daten")
     menu_icons.append("database")
+    menu_items.append("Dashboard")
+    menu_icons.append("speedometer")
     menu_items.append("Referenzen")
     menu_icons.append("box-arrow-up-right")
     return menu_items, menu_icons
@@ -54,6 +57,7 @@ def main():
         st.session_state["action-areas"] = {}
         for x in [member.value for member in ActionAreaTypes]:
             st.session_state["action-areas"][x] = ActionArea(x)
+        st.session_state['dashboard'] = Dashboard()
 
     menu_items, menu_icons = get_menu()
     with st.sidebar:
@@ -68,8 +72,8 @@ def main():
         show_references()
     elif selected == "Daten":
         show_data()
-    elif selected == "Szenarios":
-        show_scenarios()
+    elif selected == "Dashboard":
+        st.session_state['dashboard'].show_ui()
     else:
         action_area = [
             obj
