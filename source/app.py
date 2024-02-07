@@ -1,5 +1,7 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
+from datasets import DataBrowser
+
 from climate_strategy import (
     ActionAreaTypes,
     ActionArea,
@@ -18,6 +20,18 @@ MY_EMOJI = "🔮"
 MY_NAME = "KSS-Monitoring"
 
 
+def init():
+    st.set_page_config(
+    page_title=MY_NAME,
+    page_icon=MY_EMOJI,
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+        'About': "# This is a header. This is an *extremely* cool app!"
+    }
+)
 def get_menu():
     menu_items = []
     menu_icons = []
@@ -25,6 +39,8 @@ def get_menu():
         menu_items.append(value.menu_text)
         menu_icons.append(value.menu_icon)
 
+    menu_items.append("---")
+    menu_icons.append("")
     menu_items.append("Daten")
     menu_icons.append("database")
     menu_items.append("Dashboard")
@@ -53,6 +69,7 @@ def show_info_box():
 
 
 def main():
+    init()
     if not ("action-areas" in st.session_state):
         st.session_state["action-areas"] = {}
         for x in [member.value for member in ActionAreaTypes]:
@@ -71,7 +88,8 @@ def main():
     if selected == "Referenzen":
         show_references()
     elif selected == "Daten":
-        show_data()
+        app = DataBrowser()
+        app.show_ui()
     elif selected == "Dashboard":
         st.session_state['dashboard'].show_ui()
     else:

@@ -2,11 +2,11 @@ import streamlit as st
 import pandas as pd
 from enum import Enum
 from plots import show_area_plot, line_chart, test
-from data import action_areas
+from metadata import action_areas as aa
 import json
 import os
 
-from sim import m1, m2
+from sim import m1, m2, m3
 from utils import convert_df
 
 # constants
@@ -85,11 +85,11 @@ DIC_DATASETS = get_dic_datasets()
 class ActionArea:
     def __init__(self, id: ActionAreaTypes):
         self.id = id
-        self.description = action_areas[id]["description"]
-        self.title = action_areas[id]["title"]
-        self.menu_text = action_areas[id]["menu_text"]
-        self.menu_icon = action_areas[id]["menu_icon"]
-        self.goals = action_areas[id]["goals"]
+        self.description = aa[id]["description"]
+        self.title = aa[id]["title"]
+        self.menu_text = aa[id]["menu_text"]
+        self.menu_icon = aa[id]["menu_icon"]
+        self.goals = aa[id]["goals"]
         self.measures = []
         self.time_series_options = []  # self.get_time_series_options(id)
         self.hist_values = []  # self.get_hist_data(id)
@@ -176,7 +176,7 @@ class ActionArea:
                 year, value = self.get_value(key)
                 st.markdown(f"Ist ({year}): {value}%")
         
-        with st.expander("Daten & Grafik"):
+        with st.expander("Daten & Grafik", expanded=True):
             plot, plot_df = self.current_simulation.get_plot()
             st.plotly_chart(plot)
             st.download_button(
@@ -204,7 +204,7 @@ class ActionArea:
                     f'**Methodik:**\n\n{goal["monitoring"]}', unsafe_allow_html=True
                 )
                 st.markdown("**Szenarien**")
-                with st.expander("Faktoren"):
+                with st.expander("Faktoren", expanded=True):
                     allow_edit = st.toggle("Bearbeiten", value=False)
                     df = self.current_simulation.intervals_df
                     edited_df = st.data_editor(df)
