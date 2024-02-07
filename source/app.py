@@ -11,10 +11,10 @@ from climate_strategy import (
 )
 from dashboard import Dashboard
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 __author__ = "Statistisches Amt des Kantons Basel-Stadt"
 __author_email__ = "stata@bs.ch"
-VERSION_DATE = "2024-02-06"
+VERSION_DATE = "2024-02-07"
 GIT_REPO = "https://github.com/lcalmbach/climate-strategy-bs"
 MY_EMOJI = "🔮"
 MY_NAME = "KSS-Monitoring"
